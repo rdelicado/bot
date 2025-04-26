@@ -17,9 +17,10 @@ def ver_saldo():
         balance = session.get_wallet_balance(accountType="UNIFIED")
         coins = balance['result']['list'][0]['coin']
         for coin in coins:
-            if coin['coin'] == 'USDT':
-                print(f"Saldo disponible USDT: {coin['walletBalance']}")
-                print(f"Saldo total USDT (equity): {coin['equity']}")
+            print(f"Moneda: {coin['coin']}")
+            print(f"  Saldo disponible: {coin['walletBalance']}")
+            print(f"  Saldo total (equity): {coin['equity']}")
+            print("-" * 30)
     except Exception as e:
         print(f"❌ Error: {str(e)}")
 
