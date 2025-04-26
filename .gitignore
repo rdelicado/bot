@@ -1,0 +1,29 @@
+proyecto.md
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+.venv/
+
+# Environment files
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Tests
+.coverage
+
+# json
+bybit.json
+bybit.jsonc
