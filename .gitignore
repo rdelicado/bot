@@ -27,3 +27,7 @@ logs/
 # json
 bybit.json
 bybit.jsonc
+
+# test
+.pytest_cache
+
