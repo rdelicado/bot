@@ -43,3 +43,45 @@ class BybitClient:
         except Exception as e:
             print(f"❌ Error al obtener el price: {e}")
             return None
+    
+    def get_candles(self, symbol, interval="1", limit=100, category="linear"):
+            """"
+            Devuelve tres listas: cierres, altos y bajos de las velas.
+            """
+            try:
+                candles = self.session.get_kline(
+                    category=category,
+                    symbol=symbol,
+                    interval=interval,
+                    limit=limit
+                )
+                #print("Respuesta cruda de velas:", candles)
+                # Invierte para que sea de antiguo a reciente
+                lista = candles['result']['list'][::-1]
+                cierres = [float(c[4]) for c in lista]
+                altos = [float(c[2]) for c in lista]
+                bajos = [float(c[3]) for c in lista]
+                #print(f"mostrar_cierres: {cierres}")
+                return cierres, altos, bajos
+            except Exception as e:
+                print(f"❌ Error al obtener las velas: {e}")
+                return [], [], []
+    
+''''
+La clave 'list' en la respuesta de Bybit contiene los datos de las velas.
+La estructura de cada vela es la siguiente:
+['1745743860000', '94307.3', '94307.4', '94265.5', '94281.4', '3.568791', '336487.4957817']
+[
+    [
+        '1745743860000',  # Timestamp
+        '94307.3',       # Open
+        '94307.4',       # High
+        '94265.5',       # Low
+        '94281.4',       # Close
+        '3.568791',      # Volume
+        '336487.4957817' # Quote Volume
+
+    ],
+    ...
+]
+'''
