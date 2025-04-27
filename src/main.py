@@ -1,4 +1,5 @@
 from exchange.bybit_client import BybitClient
+from exchange.trading import abrir_posicion, cerrar_posicion
 from indicators.technical_indicators import (
     calcular_ema,
     calcular_adx,
@@ -64,6 +65,41 @@ if __name__ == "__main__":
             print(f"{precio:.2f}: {vol}")
     else:
         print("No hay suficientes datos para Volume Profile.")
+
+# --- BLOQUE 3: Abrir y cerrar posiciones ---
+    symbol = "BTCUSDT"
+    interval = "240"  # 4 horas
+
+    # Obtener el precio actual
+    client = BybitClient()
+    precio_actual = client.get_price(symbol)
+    try:
+        precio_actual = float(precio_actual)
+    except (TypeError, ValueError):
+        precio_actual = None
+
+    usd_para_operar = 100
+
+    # Calcular cantidad de BTC a comprar con 100 USD
+    if precio_actual and precio_actual > 0:
+        qty = round(usd_para_operar / precio_actual, 3)  # 3 decimales para BTCUSDT
+        if qty < 0.001:
+            print("La cantidad a operar es menor que 0.001 BTC. Ajusta el monto de USD para operar.")
+            qty = 0.001
+        print(f"Abriendo posición de {qty} {symbol} (~100 USD) en demo...")
+
+        respuesta_abrir = abrir_posicion(symbol, qty, "Buy")
+        #print("Respuesta abrir posición:", respuesta_abrir)
+
+        # Si quieres cerrar la posición inmediatamente para probar:
+        respuesta_cerrar = cerrar_posicion(symbol, qty, "Sell")
+        #print("Respuesta cerrar posición:", respuesta_cerrar)
+    else:
+        print("No se pudo obtener el precio actual para calcular la cantidad.")
+
+
+
+
 
 ''''
 | Intervalo API | Descripción      |
