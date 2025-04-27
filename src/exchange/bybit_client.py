@@ -67,6 +67,24 @@ class BybitClient:
                 print(f"❌ Error al obtener las velas: {e}")
                 return [], [], []
     
+    def get_volumenes(self, symbol, interval="1", limit=100, category="linear"):
+        """
+        Devuelve una lista de volúmenes de las velas para el símbolo e intervalo especificados.
+        """
+        try:
+            candles = self.session.get_kline(
+                category=category,
+                symbol=symbol,
+                interval=interval,
+                limit=limit
+            )
+            lista = candles['result']['list'][::-1]
+            volumenes = [float(c[5]) for c in lista]
+            return volumenes
+        except Exception as e:
+            print(f"❌ Error al obtener los volúmenes: {e}")
+            return []
+    
 ''''
 La clave 'list' en la respuesta de Bybit contiene los datos de las velas.
 La estructura de cada vela es la siguiente:
