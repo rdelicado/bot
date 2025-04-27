@@ -12,22 +12,34 @@ class BybitClient:
         self.session = get_bybit_session()
 
     def get_saldo(self):
-        saldo = self.session.get_wallet_balance(accountType="UNIFIED")
-        coins = saldo['result']['list'][0]['coin']
-        for coin in coins:
-            print(f"Moneda: {coin['coin']}")
-            print(f"  Saldo disponible: {coin['walletBalance']}")
-            print(f"  Saldo total (equity): {coin['equity']}")
-            print("-" * 30)
+        try:
+            saldo = self.session.get_wallet_balance(accountType="UNIFIED")
+            coins = saldo['result']['list'][0]['coin']
+            for coin in coins:
+                print(f"Moneda: {coin['coin']}")
+                print(f"  Saldo disponible: {coin['walletBalance']}")
+                print(f"  Saldo total (equity): {coin['equity']}")
+                print("-" * 30)
+        except Exception as e:
+            print(f"❌ Error al obtener el saldo: {e}")
+            return None
     
     def get_balance(self):
-        balance = self.session.get_wallet_balance(accountType="UNIFIED")
-        coins = balance['result']['list'][0]['coin']
-        for coin in coins:
-            if coin['coin'] == 'USDT':
-                return coin['walletBalance']
-        return 0
+        try:
+            balance = self.session.get_wallet_balance(accountType="UNIFIED")
+            coins = balance['result']['list'][0]['coin']
+            for coin in coins:
+                if coin['coin'] == 'USDT':
+                    return coin['walletBalance']
+            return 0
+        except Exception as e:
+            print(f"❌ Error al obtener el balance: {e}")
+            return None
 
     def get_price(self, symbol):
-        ticker = self.session.get_tickers(category="linear", symbol=symbol)
-        return ticker['result']['list'][0]['lastPrice']
+        try:
+            ticker = self.session.get_tickers(category="linear", symbol=symbol)
+            return ticker['result']['list'][0]['lastPrice']
+        except Exception as e:
+            print(f"❌ Error al obtener el price: {e}")
+            return None
